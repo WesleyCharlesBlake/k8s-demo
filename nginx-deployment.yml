@@ -1,0 +1,33 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: ubuntu
+  namespace: default
+spec:
+  selector:
+    k8s-app: ubuntu
+  ports:
+  - protocol: TCP
+    port: 80
+  type: LoadBalancer
+---
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: ubuntu
+  namespace: default
+  labels:
+    k8s-app: ubuntu
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        k8s-app: ubuntu
+    spec:
+      containers:
+        - name: ubuntu
+          image: ubuntu:16.04
+          ports:
+            - name: http
+              containerPort: 80
