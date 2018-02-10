@@ -1,11 +1,11 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: ubuntu
+  name: nginx-service
   namespace: default
 spec:
   selector:
-    k8s-app: ubuntu
+    k8s-app: nginx
   ports:
   - protocol: TCP
     port: 80
@@ -14,20 +14,20 @@ spec:
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  name: ubuntu
+  name: nginx
   namespace: default
   labels:
-    k8s-app: ubuntu
+    k8s-app: nginx
 spec:
   replicas: 3
   template:
     metadata:
       labels:
-        k8s-app: ubuntu
+        k8s-app: nginx
     spec:
       containers:
-        - name: ubuntu
-          image: ubuntu:16.04
+        - name: nginx
+          image: nginx:latest
           ports:
             - name: http
               containerPort: 80
