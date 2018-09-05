@@ -1,14 +1,20 @@
+---
 kind: Service
 apiVersion: v1
 metadata:
-  name: nginx-service
+  name: nginx
   namespace: default
+  labels:
+    tier: webserver
+    environment: staging
 spec:
   selector:
-    k8s-app: nginx
+    tier: webserver
+    environment: staging
   ports:
   - protocol: TCP
     port: 80
+    name: http
   type: LoadBalancer
 ---
 apiVersion: extensions/v1beta1
@@ -17,13 +23,15 @@ metadata:
   name: nginx
   namespace: default
   labels:
-    k8s-app: nginx
+    tier: webserver
+    environment: staging
 spec:
   replicas: 3
   template:
     metadata:
       labels:
-        k8s-app: nginx
+        tier: webserver
+        environment: staging
     spec:
       containers:
         - name: nginx
