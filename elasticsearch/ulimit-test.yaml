@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ulimit-test
+  labels:
+    service: ulimit-test
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: ulimit-test
+  template:
+    metadata:
+      labels:
+        service: ulimit-test
+    spec:
+      terminationGracePeriodSeconds: 300
+      initContainers:
+      - name: increase-ulimit
+        image: busybox
+        command:
+        - sh
+        - -c
+        - ulimit -n
+        securityContext:
+          privileged: true
+      - name: check-ulimit
+        image: busybox
+        command:
+        - sh
+        - -c
+        - ulimit -n
+        securityContext:
+          privileged: true
+      containers:
+      - name: sleep
+        image: busybox
+        command:
+        - sh
+        - -c
+        - ulimit -n && sleep 1000
